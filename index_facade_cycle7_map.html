@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html>
+  <title>Local Law 11</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <link rel="icon" href="https://www.nyc.gov/favicon.ico"/>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://nycdob.github.io/ActiveNB_A1enlargements/keen/keen-dashboards.css" />
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css' rel='stylesheet' type='text/css'/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link href="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.css" rel="stylesheet" type="text/css">
+  <style>
+
+body {
+	background-color: white;
+}
+
+#map {
+	height: 100%;
+	width: 100%;
+	pointer-events: all;
+}
+
+.pointSafe{
+	fill: #59a14f;
+	fill-opacity: .7;
+	stroke: #fff;
+
+}
+.pointSWARMP{
+	fill: #f28e2c;
+	fill-opacity: .7;
+	stroke: #fff;
+
+}
+.pointSWARMPexp{
+	fill: #b55a9d;
+	fill-opacity: .7;
+	stroke: #fff;
+
+}
+.pointUnsafe{
+	fill: #DF3B20;
+	fill-opacity: .7;
+	stroke: #fff;
+
+}
+.pointNoRptFiled{
+	fill: #999A9C;
+	fill-opacity: .7;
+	stroke: #fff;
+
+}
+
+.tooltip {
+    z-index: 500;
+    visibility: hidden;
+    color:black;
+    background: #fff;
+    border-radius: 3px; 
+    opacity: 95%; 
+    position: absolute;
+    border: 1px solid #707070;
+    bottom: 5px;
+    width: 26em;
+    font-size:1em;
+    left:5px;
+    display:flex;
+    max-height:50%;
+    flex-direction: column; 
+}
+
+
+
+/* @media( max-width:1200px){
+	.dobmain	{
+		padding-top:50px;
+	}
+	.legendShed {
+		visibility:hidden;
+	}
+	.legendCD {
+		visibility:hidden;
+	}
+	.ui {
+		margin-top: -150px;
+	}
+}
+@media ( max-width:2100px){
+	.summarytxt_sheds {
+		font-size: 12px !important;
+	}
+	.summarytxt_avgAge {
+		font-size: 12px !important;
+	}
+	.summarytxt_feet {
+		font-size: 12px !important;
+	}
+	#summary1_sheds {
+		font-size: 25px !important;
+	}
+	#summary2_avgAge {
+		font-size: 25px !important;
+	}
+	#summary3_feet {
+		font-size: 25px !important;
+	}
+	.summarytxt {
+		font-size: 12px !important;
+	}
+} */
+
+
+svg {
+	display: block;
+}
+
+
+#chart-01{
+    box-sizing: border-box;
+    width: 100%;
+	<!-- height: 150px; -->
+	height: 100%;
+    <!-- border: 0.5px solid gray; -->
+    float: left;
+	background-color: #dfdfdf;
+	<!-- margin: 0px 0px 12px; -->
+}
+
+#chart-boro-facades{
+    box-sizing: border-box;
+    width: 100%;
+	height: 200px;
+    float: left;
+	background-color: #dfdfdf;
+	margin-bottom: 10px;
+}
+#chart-status{
+    box-sizing: border-box;
+    width: 100%;
+	height: 200px;
+    float: left;
+	background-color: #dfdfdf;
+	margin-bottom: 10px;
+}
+#borosheds{
+	margin-top: 10px;
+	padding: 0px;
+	height: 150px;
+	width: 100%;
+	background-color: #fff;
+}
+#filingStatusChart{
+	margin-top: 10px;
+	padding: 0px;
+	height: 140px;
+	width: 100%;
+	background-color: #fff;
+}
+#subcycle_safe{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#subcycle_swarmp{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#subcycle_swarmp_exp{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#subcycle_unsafe{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#subcycle_nrf{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#subcycle_total{
+	margin-top: 10px;
+	padding: 0px;
+	height: 170px;
+	width: 100%;
+	background-color: #fff;
+}
+
+#chart-cycles{
+    box-sizing: border-box;
+    width: 100%;
+	height: 200px;
+    <!-- border: 0.5px solid gray; -->
+    float: left;
+	background-color: #dfdfdf;
+	<!-- margin: 0px 0px 12px; -->
+}
+
+#chart-subcycles{
+    box-sizing: border-box;
+    width: 100%;
+	height: 270px;
+    <!-- border: 0.5px solid gray; -->
+    float: left;
+	background-color: #dfdfdf;
+	<!-- margin: 0px 0px 12px; -->
+}
+
+.summarytxt{
+	font-size: 20px;
+	font-weight: bold;
+	color: #7b7b7b;
+	font-family: 'Open Sans', sans-serif; 
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	line-height: 97%;
+	padding-top: 10px;
+}
+
+#summary1_sheds{
+	font-size: 35px;
+	font-weight: bold;
+	color: #7899b0;
+	font-family: 'Open Sans', sans-serif;
+	font-family: 'Roboto', sans-serif;	
+	text-align: center;
+	line-height: 125%;
+	
+}	  
+.ui {
+	top: 10px;
+	left: 50px;
+	padding: 8px;
+	position: absolute;
+	background: white;
+	background: rgba(255,255,255,0.9);
+	border: 2px solid #707070;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 7px;
+	width: 280px;
+}
+
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + #sliderSafe {
+  background-color: #59a14f;
+}
+
+input:focus + #sliderSafe {
+  box-shadow: 0 0 1px #59a14f;
+}
+input:checked + #sliderSWARMP {
+  background-color: #f28e2c;
+}
+
+input:focus + #sliderSWARMP {
+  box-shadow: 0 0 1px #f28e2c;
+}
+input:checked + #sliderSWARMPexp {
+  background-color: #b55a9d;
+}
+
+input:focus + #sliderSWARMPexp {
+  box-shadow: 0 0 1px #b55a9d;
+}
+input:checked + #sliderUnsafe {
+  background-color: #DF3B20;
+}
+
+input:focus + #sliderUnsafe {
+  box-shadow: 0 0 1px #DF3B20;
+}
+input:checked + #sliderNoRpt {
+  background-color: #999A9C;
+}
+
+input:focus + #sliderNoRpt {
+  box-shadow: 0 0 1px #999A9C;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(12px);
+  -ms-transform: translateX(12px);
+  transform: translateX(12px);
+}
+#sliderTxt {
+	line-height: 12px;
+	vertical-align: middle;
+}
+
+.btn-primary{
+	border: none;
+}
+
+#sub_safe{
+	background-color: #59a14f;
+	opacity:0.8;
+}
+#sub_safe:hover, #sub_safe:focus, #sub_safe:active, #sub_safe.active{
+	background-color: #59a14f;
+	opacity:1;
+}
+#sub_swarmp{
+	background-color: #f28e2c;
+	opacity:0.8;
+}
+#sub_swarmp:hover, #sub_swarmp:focus, #sub_swarmp:active, #sub_swarmp.active{
+	background-color: #f28e2c;
+	opacity:1;
+}
+#sub_swarmp_exp{
+	background-color: #b55a9d;
+	opacity:0.8;
+}
+#sub_swarmp_exp:hover, #sub_swarmp_exp:focus, #sub_swarmp_exp:active, #sub_swarmp_exp.active{
+	background-color: #b55a9d;
+	opacity:1;
+}
+#sub_unsafe{
+	background-color: #DF3B20;
+	opacity:0.8;
+}
+#sub_unsafe:hover, #sub_unsafe:focus, #sub_unsafe:active, #sub_unsafe.active{
+	background-color: #DF3B20;
+	opacity:1;
+}
+#sub_nrf{
+	background-color: #999A9C;
+	opacity:0.8;
+}
+#sub_nrf:hover, #sub_nrf:focus, #sub_nrf:active, #sub_nrf.active{
+	background-color: #999A9C;
+	opacity:1;
+}
+#sub_total{
+	background-color: #7899b0;
+	opacity:0.8;
+}
+#sub_total:hover, #sub_total:focus, #sub_total:active, #sub_total.active{
+	background-color: #7899b0;
+	opacity:1;
+}
+.btn_subcycles{
+	padding-top: 10px;
+}
+.fisphist {
+	font-weight: 700;
+	font-size: 1.1em;
+	/*cursor: pointer;*/
+}
+._cycleD {
+padding: 2px 10px 10px;
+overflow-y:auto;
+}
+._cycleD > div{
+display: flex;
+margin: 3px 0px;
+
+}
+._fM3_0 :nth-child(1){
+flex:5;
+}
+._fM3_0 :nth-child(2){
+flex:4;
+}
+._b {
+font-weight:600;
+font-size: 1.2em;
+padding:10px;
+margin:0px;
+}
+._cor{
+color:white;display:none;
+}
+._nav{
+flex:1;
+}
+._tD{
+background-color: #969696 ;
+color: white;
+display:flex;
+padding:0 10px;
+}
+._tD div {
+align-self:center;
+}
+._tD :nth-child(2) {
+flex:1;
+}
+._pr, ._nx,._cl {
+font-size:1.2em;
+cursor:pointer;
+}
+._cl{
+float:right;
+}
+a.ndec{
+text-decoration: none;
+}
+.material-symbols-outlined {
+font-variation-settings:
+'FILL' 0,
+'wght' 110,
+'GRAD' -25,
+'opsz' 10;
+font-size: 12px;
+}
+
+</style>
+<body>
+
+<div class="container-fluid dobmain">
+	<div class="row">
+		  <div class="col-lg-9" style="height:100vh">
+			  <div class="chart-stage" id="map-container" style="border:1px solid black;height:100%;width:100%">
+				<div id="map">
+				<svg></svg>
+					<div id="ui-container" class="ui" style="z-index: 401">
+						<h5><b>CYCLE 7: FACADE FILING STATUS</b></h5>
+						<h6>(TOGGLE LAYERS ON & OFF)</h6>
+
+						<span style="display:inline-block;">
+						<label class="switch">
+							<input type="checkbox" checked="true" id="chkSafe">
+							<span class="slider" id="sliderSafe"></span>						
+						</label>
+						
+						<span class="en" id="sliderTxt">SAFE</span>
+						</span>
+						<br/>
+
+						<span style="display:inline-block;">
+							<label class="switch">
+								<input type="checkbox" checked="true" id="chkSWARMP">
+								<span class="slider" id="sliderSWARMP"></span>
+							</label>
+							<span class="en" id="sliderTxt">SWARMP</span>
+						</span>
+						<br/>
+
+						<span style="display:inline-block;">
+							<label class="switch">
+								<input type="checkbox" checked="true" id="chkSWARMPexp">
+								<span class="slider" id="sliderSWARMPexp"></span>
+							</label>
+							<span class="en" id="sliderTxt">SWARMP (EXPIRED)</span>
+						</span>
+						<br/>
+
+						<span style="display:inline-block;">
+							<label class="switch">
+								<input type="checkbox" checked="true" id="chkUnsafe">
+								<span class="slider" id="sliderUnsafe"></span>
+							</label>
+							<span class="en" id="sliderTxt">UNSAFE</span>
+						</span>
+						<br/>
+
+						<span style="display:inline-block;">
+							<label class="switch">
+								<input type="checkbox" id="chkNoRpt">
+								<span class="slider" id="sliderNoRpt"></span>
+							</label>
+							<span class="en" id="sliderTxt">NO REPORT FILED</span>
+						</span>
+						<br/>
+					</div>
+				</div>
+			  </div>
+		  </div>
+		  <div class="col-lg-3" style="height:100vh">
+			<div class="newchart" style="padding:5px 5px 0px 5px;border:1px solid black;height:100%;width:100%;">
+				<div class="chart-wrapper">
+				  <div class="chart-stage" id="chart-01">
+					<div class="summarytxt" >FISP UNIVERSE: </br>
+						<span id="summary1_sheds"></span>
+					</div>
+				  </div>
+				</div>
+				<div class="chart-wrapper">
+					<div class="chart-stage" id="chart-status">
+					<div class="summarytxt" >CURRENT STATUS</div>
+					  <svg id="filingStatusChart"></svg>
+					</div>
+				</div>		
+				<div class="chart-wrapper">
+					<div class="chart-stage" id="chart-boro-facades">
+					<div class="summarytxt" >FISP UNIVERSE BY BOROUGH</div>
+					  <svg id="borosheds"></svg>
+					</div>
+				</div>		
+				<div class="chart-wrapper">
+				  <div class="chart-stage" id="chart-subcycles">
+					<div class="summarytxt" >SUB-CYCLES </br><span id="summary4"></span></div>
+					
+					<div class="btn_subcycles">
+						<button class="btn btn-primary btn-sm active" id="sub_total" type="button" >TOTAL</button>
+						<button class="btn btn-primary btn-sm" id="sub_safe" type="button" >SAFE</button>
+						<button class="btn btn-primary btn-sm" id="sub_swarmp" type="button" >SWARMP</button>
+						<button class="btn btn-primary btn-sm" id="sub_swarmp_exp" type="button" >SWARMP (EXP)</button>
+						<button class="btn btn-primary btn-sm" id="sub_unsafe" type="button" >UNSAFE</button>
+						<button class="btn btn-primary btn-sm" id="sub_nrf" type="button" >NO REPORT FILED</button>
+					</div>
+					
+					<svg id="subcycle_total"></svg>	
+					<svg id="subcycle_safe"></svg>
+					<svg id="subcycle_swarmp"></svg>
+					<svg id="subcycle_swarmp_exp"></svg>
+					<svg id="subcycle_unsafe"></svg>
+					<svg id="subcycle_nrf"></svg>						
+
+				  </div>
+				</div>
+			</div>
+		  </div>
+	</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-format@3"></script>
+<script src="https://nycdob.github.io/EssentialActiveConstruction/Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+<script src="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.js"></script>
+<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+<script type="text/javascript" src="https://nycdob.github.io/ActiveNB_A1enlargements/keen/keen.min.js"></script>
+<script>
+$(document).ready(function(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;
+	var yyyy = today.getFullYear();
+	today = mm + '/' + dd + '/' + yyyy;	
+	d3.select("#today").html(today);
+	var latlong = [];
+	var selection = [];
+	var formatDate = d3.time.format("%-m/%-d/%Y").parse;
+	var numberFormat = d3.format(",.0f");
+	var legendNumFormat = d3.format(",");
+    L.Control.include({
+      _refocusOnMap: L.Util.falseFn // Do nothing.
+    });	
+var map = L.map('map').setView([40.72215448921957, -73.98616799064006], 14);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+
+
+var tooltip = d3.select('#map').append('div').attr('class', 'tooltip');
+var 
+	width = $("#map").width(),
+	height = $("#map").height(),
+	points = [],
+	pointsOverlaySQFT,
+	legendShed,
+	legendCD,
+	cdSheds,
+	sheds_CD,
+	previousColor,
+	onload = ready();
+
+	
+function ready(){
+    let _lObj={
+    "Control Number":"Control Number",
+    "Cycle":"Cycle",
+    "Filing Status":"Current Filing Status",
+    "Filing Date":"Effective Filing Date",
+    "BIN":"Bin",
+    "Address":"House Number",
+    "Block":"Block",
+    "Lot":"Lot",
+    "SWARMP Completion Date":"SWARMP Completion Date",
+    "UNSAFE Completion Date":"Unsafe Completion Date",
+    "QEWI Name":"QEWI Name",
+    "QEWI Business Name":"QEWI Business Name",
+    "Active Facade Alteration":"ActiveAlteration",
+}
+
+	pointsOverlaySQFT = L.d3SvgOverlay(function(sel,proj){
+		var pointsUpdSQFT = sel.selectAll('circle').data(points);
+
+		function pendVal(pend) { 
+		if(pend=='Y'){
+			return 'TRUE'} else {
+				return 'FALSE'
+			}
+		}
+		pointsUpdSQFT.enter()
+			.append('circle')		
+			.attr('cx',function(d){return proj.latLngToLayerPoint(d.latLng).x;})
+			.attr('cy',function(d){return proj.latLngToLayerPoint(d.latLng).y;})
+			.attr('class', function(d){
+				switch(d.filingStatus){
+					case 'SAFE':
+						return 'pointSafe';
+						break;
+					case 'SWARMP':
+						return 'pointSWARMP';
+						break;
+					case 'SWARMP (EXPIRED)':
+						return 'pointSWARMPexp';
+						break;
+					case 'UNSAFE':
+						return 'pointUnsafe';
+						break;
+					case 'No Report Filed':
+						return 'pointNoRptFiled';
+						break; 
+				}
+			})
+			
+			.on('click', function(d){
+				if(d3.select(this).style("fill-opacity") != 0){
+				    tooltip.html(dit(d["Lat"].concat(d["Lon"]),1));
+                    tooltip.style("visibility","visible"); 
+				}
+			})
+			.on("mouseover", function(d, i){
+				previousColor = d3.select(this).style("fill");
+				$(this).attr("style", "cursor: pointer; fill: #eef442; fill-opacity: 0.7;");			
+			})
+			.on("mouseout", function(d, i){			
+				d3.select(this).style("fill",previousColor);
+				d3.select(this).style( "fill-opacity",0.7);
+			});
+		
+			pointsUpdSQFT.attr("stroke-width", 1 / proj.scale);
+			pointsUpdSQFT.attr("r", 5 /proj.scale);
+
+			var safeSlider = document.querySelector('input[id="chkSafe"]');
+				swarmpSlider = document.querySelector('input[id="chkSWARMP"]');
+				swarmpExpSlider = document.querySelector('input[id="chkSWARMPexp"]');
+				unsafeSlider = document.querySelector('input[id="chkUnsafe"]');
+				noRptSlider = document.querySelector('input[id="chkNoRpt"]');
+				
+				safeSlider.onchange = function(){
+						if(this.checked){
+							d3.selectAll(".pointSafe").filter(function(d) {
+								return d.filingStatus == "SAFE";
+							})
+							.style("display", "block");	
+
+						} else {
+							d3.selectAll(".pointSafe").filter(function(d) {
+								return d.filingStatus == "SAFE";
+							})
+							.style("display", "none");
+										
+						}
+				};		
+				
+				swarmpSlider.onchange = function(){
+						if(this.checked){
+							d3.selectAll(".pointSWARMP").filter(function(d) {
+								return d.filingStatus == "SWARMP";
+							})
+							.style("display", "block");	
+
+						} else {
+							d3.selectAll(".pointSWARMP").filter(function(d) {
+								return d.filingStatus == "SWARMP";
+							})
+							.style("display", "none");
+										
+						}
+				};
+
+				swarmpExpSlider.onchange = function(){
+						if(this.checked){
+							d3.selectAll(".pointSWARMPexp").filter(function(d) {
+								return d.filingStatus == "SWARMP (EXPIRED)";
+							})
+							.style("display", "block");	
+
+						} else {
+							d3.selectAll(".pointSWARMPexp").filter(function(d) {
+								return d.filingStatus == "SWARMP (EXPIRED)";
+							})
+							.style("display", "none");
+										
+						}
+				};
+
+				unsafeSlider.onchange = function(){
+						if(this.checked){
+							d3.selectAll(".pointUnsafe").filter(function(d) {
+								return d.filingStatus == "UNSAFE";
+							})
+							.style("display", "block");	
+
+						} else {
+							d3.selectAll(".pointUnsafe").filter(function(d) {
+								return d.filingStatus == "UNSAFE";
+							})
+							.style("display", "none");
+										
+						}
+				};
+
+				noRptSlider.onchange = function(){
+						if(this.checked){
+							d3.selectAll(".pointNoRptFiled").filter(function(d) {
+								return d.filingStatus == "No Report Filed";
+							})
+							.style("display", "block");	
+
+						} else {
+							d3.selectAll(".pointNoRptFiled").filter(function(d) {
+								return d.filingStatus == "No Report Filed";
+							})
+							.style("display", "none");
+										
+						}
+				};
+				
+		
+	});
+	
+    const dit=(_pl,...args)=>{
+		if (!_pl) {tooltip.style("visibility","hidden");console.error("Invalid key");return ""};
+		if (!args[0] && !_pl.target.className.match(/_pr|_nx|_cl/)) {return};
+		let _dX=0;
+		let _l=[];
+		let doString = (_sObject,_dX, _l)=>{
+			let _xx='';
+			for (let [k,v] of Object.entries(_sObject) ) {
+				let _str=()=>{if (k.includes("Address")) {
+					return `${_l[_dX]["houseNum"].concat(" ",_l[_dX]["Street Name"],", ",_l[_dX]["Borough"] )}`;
+				}}
+				_xx+=`<div class="_fM3_0"><div>${k}:</div><div>${_str()||_l[_dX][`${v}`]}</div></div>`;
+			};
+			let truncor = _l[_dX]["Lat"].concat(_l[_dX]["Lon"]);
+			return `<div class="_tD"><div class="_nav">${_dX+1} of ${_l.length}</div><div><span class="_pr" title="Previous">&#11207;</span><span class="_nx" title="Next">&#11208;</span></div><div style="font-size:17px;" title="Close" class="material-symbols-outlined _cl">close</div></div><div class="_cycleD"><span class="_cor">${truncor}</span>${_xx}<div><a target="fisphistwin" class="fisphist" href="https://nycdob.github.io/FISPHistory/fisphistory.html?${_l[_dX]['Bin']}" title="Opens history in new window">FISP History <span class="material-symbols-outlined ">open_in_new</span></a></div></div>`;
+			}
+			let _sortD=(_ID) => {
+				return points.filter(_p=> _p["Lat"].concat(_p["Lon"]) ==_ID);
+			}
+			let _clr=()=>{
+			tooltip.style("visibility", "hidden");document.querySelector(".tooltip").innerHTML="";
+			document.querySelector(".tooltip").removeEventListener("click",dit);
+		}
+		if (!args[0]){
+			if (_pl.target.classList.contains("_cl")) {
+				_clr();return;
+			}
+			if (document.querySelector("._nav").textContent=="1 of 1"||(_pl.target.className!="_pr" && _pl.target.className!="_nx")){return};
+			let _key=document.querySelector("._cor").innerText;
+			_l=_sortD(_key);  if (!_l[0])   {_clr();console.error("Invalid key");return ""};
+			let _sN =parseInt(document.querySelector("._nav").textContent?.match(/(.*?) /));
+			if (!_sN| _sN<1||_sN>_l.length){_clr();console.error("Invalid key");return ""};
+			if (_pl.target.className=="_pr") {
+				if(_sN==1){_dX=_l.length-1} else {_dX=_sN-2;}
+			}
+			if (_pl.target.className=="_nx") {
+				if(_sN==_l.length){_dX=0} else {_dX=_sN;}
+			};
+			document.querySelector(".tooltip").innerHTML=doString(_lObj,_dX,_l);
+		} else {
+			_l=_sortD(_pl); 
+			if (!_l[0]) {_clr();console.error("Invalid key");return ""};
+			document.querySelector(".tooltip").removeEventListener("click",dit); 
+			document.querySelector(".tooltip").addEventListener("click",dit);
+			return doString(_lObj,_dX,_l);
+		};
+    }	
+		d3.csv("https://raw.githubusercontent.com/NYCDOB/LocalLaw11/refs/heads/gh-pages/data/facadeLL11_v3.csv",function(data){
+				points = data.filter(function(d) {
+					if( (([d.Cycle] == "7A") || [d.Cycle] == "7B" || [d.Cycle] == "7C") ) {
+						return d;
+					}
+				}).map(function(d){
+				d.latLng = [+d["Lat"],+d["Lon"]];
+				d.bin = [d.Bin];
+				d.houseNum = d["House Number"];
+				d.street = d["Street Name"];
+				d.block = [d.Block];
+				d.lot = [d.Lot];
+				d.swarmpCompDate = d["SWARMP Completion Date"];
+				d.unsafeCompDate = d["Unsafe Completion Date"];
+				d.controlNum = d["Control Number"];
+				//d.filingStatus = d["CN Filing Status"];
+				d.filingStatus = d["Current Filing Status"];
+				d.cycle = [d.Cycle];
+				//d.filingDate = d["CN Filing Date"];
+				d.filingDate = d["Effective Filing Date"];
+                d.qewi_name = d["QEWI Name"];
+                d.qewi_business = d["QEWI Business Name"];
+			return d;
+			});
+			
+			pointsOverlaySQFT.addTo(map);
+			
+			//d3.selectAll(".pointShed").style("display", "block");
+			d3.selectAll(".pointSafe").style("display", "block");
+			d3.selectAll(".pointSWARRP").style("display", "block");
+			d3.selectAll(".pointSWARRPexp").style("display", "block");
+			d3.selectAll(".pointUnsafe").style("display", "block");
+			d3.selectAll(".pointNoRptFiled").style("display", "none");
+			
+						
+
+		//CHARTS
+			
+			//TOTAL FACADE FILINGS
+			var totalSheds = points.map(function(d) { return d.controlNum });
+			//console.log(totalSheds);
+			d3.select("#summary1_sheds").html(numberFormat(totalSheds.length));
+			
+			//BOROUGH			
+			var nestBoroSheds = d3.nest()
+				.key(function(d){return d.Borough;})//.sortKeys(d3.ascending)
+				.rollup(function(v) { 
+					return v.length;
+				})
+				.entries(points)
+				.sort(function(a, b){ return d3.descending(a.values, b.values); })
+				//console.log(nestBoroSheds);
+				shedBoroChart(nestBoroSheds);
+
+			//CURRENT STATUS			
+			var nestFilingStatus = d3.nest()
+				.key(function(d){return (d.filingStatus).toUpperCase();})//.sortKeys(d3.ascending)
+				.rollup(function(v) { 
+					return v.length;
+				})
+				.entries(points)
+				.sort(function(a, b){ return d3.descending(a.values, b.values); })
+				//console.log(nestFilingStatus);
+				statusChart(nestFilingStatus);
+				
+			/*	
+			//SUB CYCLES
+			var nestCycles = d3.nest()
+				.key(function(d) { return d.cycle; })
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(points)
+				//.sort(function(a, b){ return d3.descending(a.values, b.values); })//.slice(0,5);	
+				//console.log(nestCycles);
+			cycleChart(nestCycles);
+			
+			//NRF SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["CN Filing Status"]=="No Report Filed"))
+			})
+			var nestPending = d3.nest()
+				.key(function(d) { return d.cycle; })
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+				//.sort(function(a, b){ return d3.descending(a.values, b.values); })//.slice(0,5);	
+			//console.log(nestPending);
+			pendChart(nestPending);
+			*/
+			/*
+			//PENDING INSPECTIONS
+			var nestPending = d3.nest()
+				.key(function(d) { 
+					if(d.pending=='Y'){
+						return 'TRUE'} else {
+							return 'FALSE'
+						}
+					 })
+				.rollup(function(v) {
+					return v.length;
+				})
+				.entries(points)
+				.sort(function(a, b){ return d3.descending(a.values, b.values); })//.slice(0,5);	
+			//console.log(nestPending);
+			//pendChart(nestPending);
+			*/
+
+			//TOTAL SUB CYCLES
+			var nestCycles = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(points)
+				//.sort(function(a, b){ return d3.descending(a.values, b.values); })//.slice(0,5);	
+			//console.log(nestCycles);
+			cycleChart(nestCycles);
+
+			//SAFE SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["Current Filing Status"]=="SAFE"))
+			})
+			var nestSafe = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+			safeChart(nestSafe);
+			
+			//SWARMP SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["Current Filing Status"]=="SWARMP"))
+			})
+			var nestSWARMP = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+			swarmpChart(nestSWARMP);
+			
+			//SWARMP (EXPIRED) SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["Current Filing Status"]=="SWARMP (EXPIRED)"))
+			})
+			var nestSWARMPexp = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+			swarmpExpChart(nestSWARMPexp);
+			
+			//UNSAFE SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["Current Filing Status"]=="UNSAFE"))
+			})
+			var nestUNSAFE = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+			unsafeChart(nestUNSAFE);
+			
+			//NRF SUB CYCLES
+			var filterVals=points.filter(function(d){
+				return ((d["Current Filing Status"]=="No Report Filed"))
+			})
+			var nestNRF = d3.nest()
+				.key(function(d) { return d.cycle; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(filterVals)
+			nrfChart(nestNRF);
+				
+			function shedBoroChart(data){
+				var shedBoroData = [
+					{
+						key: "totals",
+						values: []
+					}
+				];
+
+				// populate the empty object with your data
+				data.forEach(function (d){
+					d.values = +d.values
+					shedBoroData[0].values.push(d)
+				})     
+				
+				
+				nv.addGraph(function() {				
+					var chart = nv.models.discreteBarChart()
+						.x(function (d) {  
+							return d.key 
+						})
+						.y(function (d) { 
+							return d.values 
+						})
+						.duration(250)
+						.margin({top: 15, right: 10, bottom: 20, left: 50})
+						.color(['#7899b0']);
+					chart.yAxis.tickFormat(d3.format(','));
+
+					chart.xAxis.tickFormat(function(d){
+						if (typeof this != 'undefined') {
+						 var el = d3.select(this);
+						 var p = d3.select(this.parentNode);
+						 p.append("foreignObject")
+							.attr('x', -100)
+							.attr("width", 200)
+							.attr("height", 200)
+							.append("xhtml:p")
+							.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif;')
+							.html(d);    
+							el.remove();
+							return d;
+						}
+					});		
+					
+					d3.select('#chart-boro-facades svg')
+							.datum(shedBoroData)
+							.transition().duration(250)
+							.call(chart);
+					nv.utils.windowResize(chart.update);
+					return chart;
+				});
+			}
+
+			function statusChart(data){
+				var statusData = [
+					{
+						key: "totals",
+						values: []
+					}
+				];
+
+				// populate the empty object with your data
+				data.forEach(function (d){
+					d.values = +d.values
+					statusData[0].values.push(d)
+				})     
+				
+				
+				nv.addGraph(function() {				
+					var chart = nv.models.discreteBarChart()
+						.x(function (d) {  
+							return d.key 
+						})
+						.y(function (d) { 
+							return d.values 
+						})
+						.duration(250)
+						.margin({top: 15, right: 10, bottom: 20, left: 50})
+						.color(['#7899b0']);
+					chart.yAxis.tickFormat(d3.format(','));
+
+					chart.xAxis.tickFormat(function(d){
+						if (typeof this != 'undefined') {
+						 var el = d3.select(this);
+						 var p = d3.select(this.parentNode);
+						 p.append("foreignObject")
+							.attr('x', -100)
+							.attr("width", 200)
+							.attr("height", 200)
+							.append("xhtml:p")
+							.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif;')
+							.html(d);    
+							el.remove();
+							return d;
+						}
+					});		
+					
+					d3.select('#chart-status svg')
+							.datum(statusData)
+							.transition().duration(250)
+							.call(chart);
+					nv.utils.windowResize(chart.update);
+					return chart;
+				});
+			}
+
+			$('#sub_total').click(function(){
+				$('#subcycle_total').show();
+			   $('#subcycle_safe').hide();
+			   $('#subcycle_swarmp').hide();
+			   $('#subcycle_swarmp_exp').hide();
+			   $('#subcycle_unsafe').hide();
+			   $('#subcycle_nrf').hide();
+			   
+			});			
+			$('#sub_safe').click(function(){
+			   $('#subcycle_safe').show();
+			   $('#subcycle_swarmp').hide();
+			   $('#subcycle_swarmp_exp').hide();
+			   $('#subcycle_unsafe').hide();
+			   $('#subcycle_nrf').hide();
+			   $('#subcycle_total').hide();
+			});
+			$('#sub_swarmp').click(function(){
+			   $('#subcycle_safe').hide();
+			   $('#subcycle_swarmp').show();
+			   $('#subcycle_swarmp_exp').hide();
+			   $('#subcycle_unsafe').hide();
+			   $('#subcycle_nrf').hide();
+			   $('#subcycle_total').hide();
+			});
+			$('#sub_swarmp_exp').click(function(){
+			   $('#subcycle_safe').hide();
+			   $('#subcycle_swarmp').hide();
+			   $('#subcycle_swarmp_exp').show();
+			   $('#subcycle_unsafe').hide();
+			   $('#subcycle_nrf').hide();
+			   $('#subcycle_total').hide();
+			});	
+			$('#sub_unsafe').click(function(){
+			   $('#subcycle_safe').hide();
+			   $('#subcycle_swarmp').hide();
+			   $('#subcycle_swarmp_exp').hide();
+			   $('#subcycle_unsafe').show();
+			   $('#subcycle_nrf').hide();
+			   $('#subcycle_total').hide();
+			});	
+			$('#sub_nrf').click(function(){
+			   $('#subcycle_safe').hide();
+			   $('#subcycle_swarmp').hide();
+			   $('#subcycle_swarmp_exp').hide();
+			   $('#subcycle_unsafe').hide();
+			   $('#subcycle_nrf').show();
+			   $('#subcycle_total').hide();
+			});	
+			$('.btn_subcycles').on('click', '.btn', function() {
+			  $(this).addClass('active').siblings().removeClass('active');
+			});
+			
+	function cycleChart(data){
+				var shedCDData = [
+					{
+						key: "totals",
+						values: []
+					}
+				];
+
+				// populate the empty object with your data
+				data.forEach(function (d){
+					d.values = +d.values
+					shedCDData[0].values.push(d)
+				})     
+				
+				
+				nv.addGraph(function() {				
+					var chart = nv.models.discreteBarChart()
+						.x(function (d) {  
+							return d.key 
+						})
+						.y(function (d) { 
+							return d.values 
+						})
+						.duration(250)
+						.margin({top: 15, right: 10, bottom: 20, left: 50})
+						.color(['#7899b0']);
+					chart.yAxis.tickFormat(d3.format(','));
+
+					chart.xAxis.tickFormat(function(d){
+						if (typeof this != 'undefined') {
+						 var el = d3.select(this);
+						 var p = d3.select(this.parentNode);
+						 p.append("foreignObject")
+							.attr('x', -100)
+							.attr("width", 200)
+							.attr("height", 200)
+							.append("xhtml:p")
+							.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif;')
+							.html(d);    
+							el.remove();
+							return d;
+						}
+					});										
+
+					d3.select('#subcycle_total')
+							.datum(shedCDData)
+							.transition().duration(250)
+							.call(chart);
+					nv.utils.windowResize(chart.update);
+					return chart;
+				});
+			}
+			
+			 function safeChart(data){
+			 	var safeData = [
+			 		{
+			 			key: "totals",
+			 			values: []
+			 		}
+			 	];
+
+			 	 //populate the empty object with your data
+			 	data.forEach(function (d){
+			 		d.values = +d.values
+			 		safeData[0].values.push(d)
+			 	})     
+								
+			 		nv.addGraph(function() {				
+			 			var chart = nv.models.discreteBarChart()
+			 				.x(function (d) {  
+			 					return d.key 
+			 				})
+			 				.y(function (d) { 
+			 					return d.values 
+			 				})
+			 				.duration(250)
+			 				.margin({top: 15, right: 10, bottom: 20, left: 50})
+			 				.color(['#59a14f']);
+			 			chart.yAxis.tickFormat(d3.format(','));
+
+			 			//chart.xAxis.axisLabelDistance(10);
+			 			chart.xAxis.tickFormat(function(d){
+			 				if (typeof this != 'undefined') {
+			 				var el = d3.select(this);
+			 				var p = d3.select(this.parentNode);
+			 				p.append("foreignObject")
+			 					.attr('x', -100)
+			 					.attr("width", 200)
+			 					.attr("height", 200)
+			 					.append("xhtml:p")
+			 					.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif; pointer-events: auto;')
+			 					.html(d);
+			 					el.remove();
+			 					return d;
+			 				}
+
+			 			});	
+
+											
+			 				d3.select('#subcycle_safe')
+			 						.datum(safeData)
+			 						.transition().duration(250)
+			 						.call(chart);
+			 				nv.utils.windowResize(chart.update);
+			 				return chart;
+			 		}
+			 	);
+				
+			 }			
+			
+			 function swarmpChart(data){
+			 	var swarmpData = [
+			 		{
+			 			key: "totals",
+			 			values: []
+			 		}
+			 	];
+
+			 	 //populate the empty object with your data
+			 	data.forEach(function (d){
+			 		d.values = +d.values
+			 		swarmpData[0].values.push(d)
+			 	})     
+								
+			 		nv.addGraph(function() {				
+			 			var chart = nv.models.discreteBarChart()
+			 				.x(function (d) {  
+			 					return d.key 
+			 				})
+			 				.y(function (d) { 
+			 					return d.values 
+			 				})
+			 				.duration(250)
+			 				.margin({top: 15, right: 10, bottom: 20, left: 50})
+			 				.color(['#f28e2c']);
+			 			chart.yAxis.tickFormat(d3.format(','));
+
+			 			chart.xAxis.axisLabelDistance(10);
+			 			chart.xAxis.tickFormat(function(d){
+			 				if (typeof this != 'undefined') {
+			 				var el = d3.select(this);
+			 				var p = d3.select(this.parentNode);
+			 				p.append("foreignObject")
+			 					.attr('x', -100)
+			 					.attr("width", 200)
+			 					.attr("height", 200)
+			 					.append("xhtml:p")
+			 					.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif; pointer-events: auto;')
+			 					.html(d);
+			 					el.remove();
+			 					return d;
+			 				}
+
+			 			});	
+										
+			 				d3.select('#subcycle_swarmp')
+			 						.datum(swarmpData)
+			 						.transition().duration(250)
+			 						.call(chart);
+			 				nv.utils.windowResize(chart.update);
+			 				return chart;
+			 		}
+			 	);
+				
+			 }			
+
+			 function swarmpExpChart(data){
+			 	var swarmpExpData = [
+			 		{
+			 			key: "totals",
+			 			values: []
+			 		}
+			 	];
+
+			 	 //populate the empty object with your data
+			 	data.forEach(function (d){
+			 		d.values = +d.values
+			 		swarmpExpData[0].values.push(d)
+			 	})     
+								
+			 		nv.addGraph(function() {				
+			 			var chart = nv.models.discreteBarChart()
+			 				.x(function (d) {  
+			 					return d.key 
+			 				})
+			 				.y(function (d) { 
+			 					return d.values 
+			 				})
+			 				.duration(250)
+			 				.margin({top: 15, right: 10, bottom: 20, left: 50})
+			 				.color(['#b55a9d']);
+			 			chart.yAxis.tickFormat(d3.format(','));
+
+			 			chart.xAxis.axisLabelDistance(10);
+			 			chart.xAxis.tickFormat(function(d){
+			 				if (typeof this != 'undefined') {
+			 				var el = d3.select(this);
+			 				var p = d3.select(this.parentNode);
+			 				p.append("foreignObject")
+			 					.attr('x', -100)
+			 					.attr("width", 200)
+			 					.attr("height", 200)
+			 					.append("xhtml:p")
+			 					.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif; pointer-events: auto;')
+			 					.html(d);
+			 					el.remove();
+			 					return d;
+			 				}
+
+			 			});	
+											
+			 				d3.select('#subcycle_swarmp_exp')
+			 						.datum(swarmpExpData)
+			 						.transition().duration(250)
+			 						.call(chart);
+			 				nv.utils.windowResize(chart.update);
+							 
+			 				return chart;
+			 		}
+			 	);
+				
+			 }			
+
+			 function unsafeChart(data){
+			 	var unsafeData = [
+			 		{
+			 			key: "totals",
+			 			values: []
+			 		}
+			 	];
+
+			 	 //populate the empty object with your data
+			 	data.forEach(function (d){
+			 		d.values = +d.values
+			 		unsafeData[0].values.push(d)
+			 	})     
+								
+			 		nv.addGraph(function() {				
+			 			var chart = nv.models.discreteBarChart()
+			 				.x(function (d) {  
+			 					return d.key 
+			 				})
+			 				.y(function (d) { 
+			 					return d.values 
+			 				})
+			 				.duration(250)
+			 				.margin({top: 15, right: 10, bottom: 20, left: 50})
+			 				.color(['#DF3B20']);
+			 			chart.yAxis.tickFormat(d3.format(','));
+
+			 			chart.xAxis.axisLabelDistance(10);
+			 			chart.xAxis.tickFormat(function(d){
+			 				if (typeof this != 'undefined') {
+			 				var el = d3.select(this);
+			 				var p = d3.select(this.parentNode);
+			 				p.append("foreignObject")
+			 					.attr('x', -100)
+			 					.attr("width", 200)
+			 					.attr("height", 200)
+			 					.append("xhtml:p")
+			 					.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif; pointer-events: auto;')
+			 					.html(d);
+			 					el.remove();
+			 					return d;
+			 				}
+
+			 			});	
+											
+			 				d3.select('#subcycle_unsafe')
+			 						.datum(unsafeData)
+			 						.transition().duration(250)
+			 						.call(chart);
+			 				nv.utils.windowResize(chart.update);
+			 				return chart;
+			 		}
+			 	);
+				
+			 }
+			
+			 function nrfChart(data){
+			 	var nrfData = [
+			 		{
+			 			key: "totals",
+			 			values: []
+			 		}
+			 	];
+
+			 	 //populate the empty object with your data
+			 	data.forEach(function (d){
+			 		d.values = +d.values
+			 		nrfData[0].values.push(d)
+			 	})     
+								
+			 		nv.addGraph(function() {				
+			 			var chart = nv.models.discreteBarChart()
+			 				.x(function (d) {  
+			 					return d.key 
+			 				})
+			 				.y(function (d) { 
+			 					return d.values 
+			 				})
+			 				.duration(250)
+			 				.margin({top: 15, right: 10, bottom: 20, left: 50})
+			 				.color(['#999A9C']);
+			 			chart.yAxis.tickFormat(d3.format(','));
+
+			 			chart.xAxis.axisLabelDistance(10);
+			 			chart.xAxis.tickFormat(function(d){
+			 				if (typeof this != 'undefined') {
+			 				var el = d3.select(this);
+			 				var p = d3.select(this.parentNode);
+			 				p.append("foreignObject")
+			 					.attr('x', -100)
+			 					.attr("width", 200)
+			 					.attr("height", 200)
+			 					.append("xhtml:p")
+			 					.attr('style','word-wrap: break-word; text-align:center; font: normal 9px sans-serif; pointer-events: auto;')
+			 					.html(d);
+			 					el.remove();
+			 					return d;
+			 				}
+
+			 			});	
+											
+			 				d3.select('#subcycle_nrf')
+			 						.datum(nrfData)
+			 						.transition().duration(250)
+			 						.call(chart);
+			 				nv.utils.windowResize(chart.update);
+			 				return chart;
+			 		}
+			 	);
+				
+			 }
+			
+	});	
+}
+});	
+
+</script>
+</body>
+</html>
