@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facade Filing Status - Local Law 11</title>
+    <link rel="icon" href="https://nycdob.github.io/ActiveNB_A1enlargements/data/iconlogo.png">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://nycdob.github.io/DOB_Dashboards/assets/css/keen-dashboards.css" />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<style>
+body{
+    margin:0;padding:0;
+}
+html,body {
+height: 100vh;
+}
+iframe {
+width: 100%;
+height: 86vh;
+overflow-x: hidden !important;
+border: 0;
+margin-top:10px;
+}
+.logo{
+	background-image: url('https://raw.githubusercontent.com/NYCDOB/CommunityProfiles_v2/gh-pages/dob_logo_white_transparent.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	float: right;
+	background-size: 80px;
+	height: 50px;
+	width: 110px;		 
+}
+._h1{
+	display:flex;flex-direction:column;;    box-shadow: 3px 2px 3px 0px rgb(207 200 200);
+	& ._h1a {
+		background: linear-gradient(90deg, rgba(40, 68, 100, 1) 42%, rgba(45, 125, 192, 1) 100%);
+		gap:30px;
+			color:white;
+			display:flex;
+			flex-direction:row;
+			align-items: center;
+			justify-content:space-between;
+			padding: .6em 2em;
+			& div:nth-child(2) {
+					margin-left:auto;}
+		}
+	& ._h1b {
+			font-size:2em;
+			font-weight:bold;
+			color:white; }
+}
+a.nolinkstyle:focus, 
+a.nolinkstyle:visited, 
+a.nolinkstyle:active {
+	text-decoration:none;
+	color:white;
+}
+._h1c {
+	display:flex;
+	flex-direction:row;
+	background-color:#eaeaea;
+	font-weight:	bolder;
+	padding: .6em 2em;
+    align-items:center;
+	gap: 30px;
+	justify-content:space-between;
+	& .changecycle {display:flex;flex-direction:row;justify-content:space-between;gap:50px;font-size:1.5em;}
+    & .switch {color: #818280;    }
+	& div:nth-child(2) {
+		margin-left:auto;}
+	& .dlData {
+			border:none;
+			color:rgb(51, 122, 183);
+			background-color:transparent;
+			text-decoration:none;
+	}
+	& .dlData:hover {text-decoration:underline;}
+}
+.nosplash{display:none;}
+._sInfo{
+    font-size:1.2em;
+    box-shadow: 3px 3px 7px rgb(110, 111, 111);
+	z-index: 9999;
+	padding: 20px 3em;
+	width: 75%;
+	max-height: 80%;
+    border: 2px solid rgb(136 136 136);    
+    border-radius: 5px;
+	margin-top:2%;
+	animation: dropin 400ms linear ;
+    & h1 {
+        font-weight:600;
+        padding-bottom:30px;
+        & image {
+            vertical-align: baseline;
+        }
+    }
+    & button {
+        margin-left:50%;
+    }
+}
+@keyframes dropin{
+  0%{
+	margin-top:-100%;
+  }
+}
+._sInfo::backdrop {
+	background-color: rgba(119, 108, 106, 0.5);
+	backdrop-filter: blur(10px);
+}
+.closemodal:not(button) {
+	position:absolute;
+	top:0; padding:10px;
+	right:0;
+	font-size:1.2em;
+	cursor:pointer;
+}
+.showhelp {
+	color: white;
+	padding-top: 10px;
+	padding-right: 25px;
+	font-weight: 600;
+	cursor:pointer;
+    margin-left:auto;
+}
+.showhelp:hover {
+    color: #999;
+    text-decoration:underline;
+}
+.closemodal:not(button) {
+	position:absolute;
+	top:0;
+	right:0;
+	font-size:1.5em;
+	cursor:pointer;
+}
+
+@media( max-width:1200px){
+	._top {
+		display:flex;
+		flex-direction:row;
+		& .dlData {
+			margin-left:0px;
+		}
+	}
+}
+[class*="switch"]:not([class*="selected"]) {
+	color:rgb(119, 119, 123);
+	cursor:pointer;
+}
+[class*="switch"]:hover {
+		text-shadow: 1px 1px 3px #a9a9a9;;
+	}
+[class*="selected"] { font-weight:700;}
+.footr{ 
+	background-color: black;
+    display: flex;
+    color: white;
+    flex-direction: row;
+    justify-content: space-around;
+    font-weight: 700;
+    font-size: smaller;
+    height: 40px;
+    align-items: center;
+}
+</style>
+<body >
+	<dialog class="_sInfo" tabindex="-1">
+		<form method="dialog">
+		<span  class="material-symbols-outlined pull-right closemodal">Cancel</span>
+		<h1>
+		<img  src="https://github.com/NYCDOB/LocalLaw11/blob/gh-pages/img/DOB-NOW-logo.png?raw=true" alt="DOB Now">
+		Façade & Local Law
+		</h1>
+		<h2 style="padding-bottom:20px;">Façade Safety and Inspection Program (FISP)</h2>
+		<p></p><p>To keep buildings safe, owners of properties higher than six stories must have exterior walls and appurtenances inspected every five (5) years – and they must file a technical façade report with the Department. See NYC Construction Codes §28-302.1 and RCNY §103-04. The current Façade Rule was last revised on November 11, 2021. See FAQs for information on 1RCNY 101-07 and 1RCNY 103-04.</p>
+		<p style="padding-bottom:20px;">Property owners must repair unsafe conditions within 90 days of filing a technical report. Once all unsafe conditions have been corrected, owners must file an amended report within two weeks.</p>
+		<h4 style="padding-bottom:20px;">	Learn more about the NYC Department of Buildings <a href="https://www.nyc.gov/site/buildings/safety/facade-local-law.page" target="_blank">Façade Safety and Inspection Program (FISP)</a></h4>
+		<button class="center-block btn-lg bg-primary" autofocus>Close</button>
+		<div class="small nosplash">
+		<input type="checkbox" id="nosplash" name="nosplash" />
+		<label for="nosplash">Do not show this splash screen again</label>
+		</div>
+		</form>
+		</dialog>
+    <div class="_h1">
+        <div class="_h1a">
+            <div class="_h1b">Facades Filing Status - Local Law 11</div>
+			<div><a class="nolinkstyle" href="https://www.nyc.gov/site/buildings/safety/facade-local-law.page" target="_blank">Learn More</a></div>
+            <div><a class="logo" href="https://www1.nyc.gov/site/buildings/index.page" target="_blank"> </a></div>
+        </div>
+        <div class="_h1c">
+            <div class="changecycle">
+                    <div span class="switch9 selected" title="2020 - 2025">Cycle 9</div>
+                    <div span class="switch8" title="2015 - 2020">Cycle 8</div>
+                    <div span class="switch7" title="2010 - 2015">Cycle 7</div>
+            </div>
+            <div>Built by <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a></div>
+			<div class="dlData">
+				<button class="dlData">Download Data (.csv)</button>
+			</div>
+        </div>
+    </div>
+    <iframe src="https://nycdob.github.io/LocalLaw11/index_facade_cycle9_map.html" id="myframe"></iframe>
+	<div class="footr">
+		<div><a class="nolinkstyle" href="https://www.nyc.gov/home/privacy-policy.page" target="_blank">Privacy Policy</a></div>
+		<div><a class="nolinkstyle" href="https://www.nyc.gov/home/terms-of-use.page" target="_blank">Terms of Use</a></div>
+	</div>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+    void function() {
+		document.querySelector("._sInfo").showModal();
+		document.querySelector(".dlData").addEventListener("click",e=>{
+		e.preventDefault();
+		window.location.href='https://nycdob.github.io/LocalLaw11/data/facadeLL11_v3.csv';
+	});
+	document.addEventListener("click",    e=>{
+			if (e.target.getAttribute("class")?.includes("showhelp")) {
+				e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();
+				const _z2=document.querySelector("._sInfo");
+				const _z9=document.querySelector(".closemodal");
+				_z9.focus();_z2.showModal();document.querySelector("dialog").scrollTo({top:0,left:0,behavior:"instant"});
+			} else 
+			if (e.target.getAttribute("id")?.match(/nosplash/)     ) {
+				console.log('nosplash')
+
+			}
+			if (e.target.getAttribute("class")?.includes("closemodal") ) {
+				e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();
+				const _z2=document.querySelector("._sInfo");
+				_z2.close();
+			}})
+	document.querySelectorAll("[class*='switch']").forEach(x=>
+		x.addEventListener("click",e=>{
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			if (e.target.className.match(/selected/)) return;
+			document.querySelector("#myframe").src=`https://nycdob.github.io/LocalLaw11/index_facade_cycle${e.target.className.match(/\d/)[0]}_map.html`
+			document.querySelector("[class*='selected']").classList.remove("selected");
+			e.target.classList.add("selected");
+		}))
+    }()
+</script>
+</body>
+</html>
